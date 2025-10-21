@@ -35,13 +35,29 @@ cd Lumina
 npm install
 ```
 
-2. **Build and deploy the smart contract:**
+## 🚀 Deployment Guide
+
+### Smart Contract Deployment (Stellar Testnet)
+
+1. **Setup Stellar CLI:**
 ```bash
-# Build the contract
+# Install Rust and WASM target
+rustup target add wasm32-unknown-unknown
+
+# Install Stellar CLI
+cargo install --locked stellar-cli
+
+# Generate keypair and fund with test XLM
+stellar keys generate --alias alice
+# Copy public key and get test XLM from: https://laboratory.stellar.org/#account-creator?network=test
+```
+
+2. **Build and Deploy Contract:**
+```bash
 cd contract
 cargo build --target wasm32-unknown-unknown --release
 
-# Deploy to testnet (requires stellar-cli setup)
+# Deploy to Stellar Testnet
 stellar contract deploy \
   --wasm target/wasm32-unknown-unknown/release/lumina_contract.wasm \
   --source alice \
@@ -49,9 +65,40 @@ stellar contract deploy \
   --alias lumina_contract
 ```
 
-3. **Update contract ID in frontend:**
-   - Copy the contract ID from deployment
-   - Update `app/services/contractService.ts` with your contract ID
+3. **Update Frontend:**
+   - Copy the returned Contract ID
+   - Update `app/services/contractService.ts`:
+   ```typescript
+   export const CONTRACT_ID = 'YOUR_CONTRACT_ID_HERE'
+   ```
+
+### Frontend Deployment (Vercel)
+
+1. **Local Build Test:**
+```bash
+npm install
+npm run build
+```
+
+2. **Deploy to Vercel:**
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel --prod
+```
+
+3. **Optional: Connect GitHub for auto-deploy**
+   - Link your GitHub repository in Vercel dashboard
+   - Every push to main branch will auto-deploy
+
+### Production Checklist
+- [ ] Contract deployed to Stellar Testnet
+- [ ] Contract ID updated in frontend
+- [ ] Frontend deployed to Vercel
+- [ ] Test tip functionality with Freighter wallet
+- [ ] Verify transaction on Stellar Explorer
 
 4. **Run the development server:**
 ```bash
