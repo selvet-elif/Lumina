@@ -114,6 +114,7 @@ The dApp is designed to work on Stellar Testnet:
 - [Freighter Wallet Docs](FreighterWalletDocs.md)
 - [Stellar Deployment Guide](StellarDeploy.md)
 - [Product Requirements](pdr.md)
+- [Vercel Deployment Guide](DEPLOYMENT.md)
 
 ## 🤝 Contributing
 

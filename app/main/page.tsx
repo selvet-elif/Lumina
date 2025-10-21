@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import freighterApi from '@stellar/freighter-api'
-import { Server, Networks, TransactionBuilder, Operation, Asset, Keypair } from 'stellar-sdk'
+import { Networks, TransactionBuilder, Operation, Asset, Keypair } from 'stellar-sdk'
+import  Server  from 'stellar-sdk'
 import { contractService } from '../services/contractService'
 
 interface TipStats {
@@ -108,7 +109,7 @@ export default function MainPage() {
       const { signedTxXdr, error: signError } = await freighterApi.signTransaction(
         transactionXdr,
         {
-          network: 'TESTNET',
+          networkPassphrase: Networks.TESTNET,
           address: publicKey
         }
       )
