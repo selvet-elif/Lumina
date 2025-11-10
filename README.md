@@ -10,6 +10,17 @@ A minimalist decentralized application (dApp) for sending tips to content creato
 - **Real-time Statistics** - Track total tips and last tipper
 - **Transaction History** - View transaction IDs and confirmations
 
+## 🔗 Deployed Contract (Testnet)
+
+| Item | Link |
+|------|------|
+| **Contract Address** | `CAV5N3NUKQD57H3ME4SH7QJ6KAGYTTFTZS6B2J3CV6MDNQIKSYCTBBVG` |
+| **Contract** | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CAV5N3NUKQD57H3ME4SH7QJ6KAGYTTFTZS6B2J3CV6MDNQIKSYCTBBVG) |
+| **Deployment Tx** | `b4753385707262f7dbd27bce6cd5f6ed7ad0d698ea0258a69cc1325928934fc0` |
+| **Transaction** | [View on Stellar Expert](https://stellar.expert/explorer/testnet/tx/b4753385707262f7dbd27bce6cd5f6ed7ad0d698ea0258a69cc1325928934fc0) |
+
+---
+
 ## 🛠 Tech Stack
 
 - **Frontend**: Next.js 14, TypeScript, Tailwind CSS
@@ -38,6 +49,8 @@ npm install
 ## 🚀 Deployment Guide
 
 ### Smart Contract Deployment (Stellar Testnet)
+
+
 
 1. **Setup Stellar CLI:**
 ```bash
@@ -113,22 +126,23 @@ npm run dev
 ## 📁 Project Structure
 
 ```
+## 📦 Project Structure
+
+```
 Lumina/
-├── app/                    # Next.js app directory
-│   ├── page.tsx           # Connect page
-│   ├── main/              # Main tipping interface
-│   │   └── page.tsx
-│   ├── services/          # Contract integration
-│   │   └── contractService.ts
-│   ├── globals.css        # Global styles
-│   └── layout.tsx         # App layout
-├── contract/              # Soroban smart contract
-│   ├── src/
-│   │   └── lib.rs         # Contract implementation
-│   ├── Cargo.toml
-│   └── README.md
-├── scripts/               # Build scripts
-└── docs/                  # Documentation
+├── app/                          # Next.js app directory
+│   ├── layout.tsx               # Root layout
+│   ├── page.tsx                 # Main connect page
+│   └── services/
+│       └── contractService.ts   # Soroban contract interactions
+├── contract/                     # Rust Soroban smart contract
+│   ├── src/lib.rs               # Contract logic
+│   └── Cargo.toml
+├── tailwind.config.js           # Tailwind CSS config
+├── postcss.config.js            # PostCSS config
+├── next.config.js               # Next.js config
+├── vercel.json                  # Vercel deployment config
+└── README.md
 ```
 
 ## 🔧 Smart Contract Functions

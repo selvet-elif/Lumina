@@ -14,5 +14,8 @@ export class ContractService {
   async getTip(index: number): Promise<any> { return null }
 }
 
-export const CONTRACT_ID = 'CA4CQNWUZS2KMCT4QSCQQ24PED4NOZU2FFCE5F36NOJNUK5SENPQPXZA'
+// Prefer reading the contract ID from an environment variable for production (Vercel).
+// Fallback to the recently deployed Testnet contract ID returned by your deploy command.
+const contractId = process.env.NEXT_PUBLIC_CONTRACT_ID || 'CBXUV5TUYUJAMYXYJL4G4RLTWSB6QBFR3QOP6V7HVRNINGYFHVZPZFWB'
+export const CONTRACT_ID = contractId
 export const contractService = new ContractService(CONTRACT_ID, 'testnet')
