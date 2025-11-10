@@ -10,7 +10,7 @@ A minimalist decentralized application (dApp) for sending tips to content creato
 - **Real-time Statistics** - Track total tips and last tipper
 - **Transaction History** - View transaction IDs and confirmations
 
-## :purple_heart: To Send Tips: lumina-pink.vercel.app
+## :purple_heart: To Send Tips: [lumina-pink.vercel.app](https://lumina-pink.vercel.app/)
 
 ## 🔗 Deployed Contract (Testnet)
 
