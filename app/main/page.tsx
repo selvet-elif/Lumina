@@ -129,17 +129,32 @@ export default function MainPage() {
       const transactionXdr = transaction.toXDR()
 
       // Sign with Freighter
-      const signedTxXdr = await freighterApi.signTransaction(
-        transactionXdr,
-        {
-          networkPassphrase: Networks.TESTNET,
-          address: publicKey
-        }
-      )
+      const signResp = await freighterApi.signTransaction(transactionXdr, {
+        networkPassphrase: Networks.TESTNET,
+        address: publicKey
+      })
+
+      // Freighter v5 returns a string; older versions return { signedTxXdr }
+      const signedTxXdr = typeof signResp === 'string' ? signResp : (signResp as any)?.signedTxXdr
+      if (!signedTxXdr) {
+        throw new Error('Signing failed: invalid response from Freighter')
+      }
 
       // Submit transaction
       const signedTransaction = TransactionBuilder.fromXDR(signedTxXdr, Networks.TESTNET)
-      const result = await server.submitTransaction(signedTransaction)
+      let result: any
+      try {
+        result = await server.submitTransaction(signedTransaction)
+      } catch (submitErr: any) {
+        // Extract rich Horizon error details if available
+        const problem = submitErr?.response?.data
+        const codes = problem?.extras?.result_codes
+        const errMsg = codes
+          ? `Horizon error: tx=${codes.transaction || 'unknown'} op=${(codes.operations || []).join(',')}`
+          : (problem?.title || submitErr?.message || 'Transaction submission failed')
+        console.error('Horizon submit error:', problem || submitErr)
+        throw new Error(errMsg)
+      }
 
       if (result.successful) {
         setSuccessMessage('Thank you for your tip! 💜')
