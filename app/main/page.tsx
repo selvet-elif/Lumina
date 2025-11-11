@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import freighterApi from '@stellar/freighter-api'
-import { Networks, TransactionBuilder, Operation, Asset, Server } from '@stellar/stellar-sdk'
 import { contractService } from '../services/contractService'
 
 interface TipStats {
@@ -25,9 +24,18 @@ export default function MainPage() {
     lastTipper: '',
     lastTxId: ''
   })
+  const [stellarSdk, setStellarSdk] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
+    // Dynamically import Stellar SDK on client side only
+    const loadStellarSdk = async () => {
+      const sdk = await import('@stellar/stellar-sdk')
+      setStellarSdk(sdk)
+    }
+    
+    loadStellarSdk()
+
     // Check if user is connected
     const savedPublicKey = localStorage.getItem('lumina_public_key')
     if (!savedPublicKey) {
@@ -36,7 +44,6 @@ export default function MainPage() {
     }
     setPublicKey(savedPublicKey)
     
-    // Load tip stats (we'll implement this with contract integration)
     loadTipStats()
   }, [router])
 
@@ -55,7 +62,6 @@ export default function MainPage() {
       })
     } catch (error) {
       console.error('Error loading tip stats:', error)
-      // Fallback to placeholder data if contract is not deployed
       setTipStats({
         totalTips: 0,
         lastTipper: 'Contract not deployed',
@@ -65,6 +71,11 @@ export default function MainPage() {
   }
 
   const handleSendTip = async () => {
+    if (!stellarSdk) {
+      setError('Stellar SDK is still loading. Please try again.')
+      return
+    }
+
     if (!tipAmount || !receiverAddress) {
       setError('Please fill in both tip amount and receiver address')
       return
@@ -80,15 +91,28 @@ export default function MainPage() {
     setSuccessMessage('')
 
     try {
+      const { Horizon, Networks, TransactionBuilder, Operation, Asset } = stellarSdk
+
       // Initialize Stellar server for testnet
-      const server = new Server('https://horizon-testnet.stellar.org')
+      const server = new Horizon.Server('https://horizon-testnet.stellar.org')
       
       // Get account info
       const sourceAccount = await server.loadAccount(publicKey)
+
+      // Validate destination account exists
+      try {
+        await server.loadAccount(receiverAddress)
+      } catch (destErr: any) {
+        setError('Receiver account does not exist on Testnet. Ask them to create/activate it.')
+        return
+      }
+
+      // Fetch current base fee
+      const baseFee = await server.fetchBaseFee()
       
       // Create transaction
       const transaction = new TransactionBuilder(sourceAccount, {
-        fee: '100',
+        fee: String(baseFee),
         networkPassphrase: Networks.TESTNET
       })
       .addOperation(
@@ -105,17 +129,13 @@ export default function MainPage() {
       const transactionXdr = transaction.toXDR()
 
       // Sign with Freighter
-      const { signedTxXdr, error: signError } = await freighterApi.signTransaction(
+      const signedTxXdr = await freighterApi.signTransaction(
         transactionXdr,
         {
           networkPassphrase: Networks.TESTNET,
           address: publicKey
         }
       )
-
-      if (signError) {
-        throw new Error(`Signing failed: ${signError}`)
-      }
 
       // Submit transaction
       const signedTransaction = TransactionBuilder.fromXDR(signedTxXdr, Networks.TESTNET)
@@ -160,6 +180,15 @@ export default function MainPage() {
   const handleDisconnect = () => {
     localStorage.removeItem('lumina_public_key')
     router.push('/')
+  }
+
+  // Show loading state while Stellar SDK loads
+  if (!stellarSdk) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-4 flex items-center justify-center">
+        <div className="text-white text-xl">Loading Lumina...</div>
+      </div>
+    )
   }
 
   return (
