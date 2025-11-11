@@ -15,7 +15,7 @@ A minimalist decentralized application (dApp) for sending tips to content creato
 </p>
 
 <p align="center">
-  <img src="./images/lumina_transaction.PNG" alt="Lumina Transaction Confirmation" width="700"><br/>
+  <img src="./images/lumina_transaction_complete.PNG" alt="Lumina Transaction Confirmation" width="700"><br/>
   <em>Transaction confirmation displayed after sending a tip.</em>
 </p>
 
