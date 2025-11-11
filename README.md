@@ -2,6 +2,25 @@
 
 A minimalist decentralized application (dApp) for sending tips to content creators using Stellar XLM. Built with Next.js, TypeScript, Tailwind CSS, and Stellar Soroban smart contracts.
 
+## 🖼️ Preview
+
+<p align="center">
+  <img src="./assets/lumina_connect.PNG" alt="Lumina Connect Page" width="700"><br/>
+  <em>Connect your Freighter wallet to start tipping.</em>
+</p>
+
+<p align="center">
+  <img src="./assets/lumina_mainpage.PNG" alt="Lumina Main Interface" width="700"><br/>
+  <em>Dashboard showing tip statistics and send form.</em>
+</p>
+
+<p align="center">
+  <img src="./assets/lumina_transaction.PNG" alt="Lumina Transaction Confirmation" width="700"><br/>
+  <em>Transaction confirmation displayed after sending a tip.</em>
+</p>
+
+---
+
 ## 🎯 Features
 
 - **Freighter Wallet Integration** - Connect and sign transactions with Freighter
