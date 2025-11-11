@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import freighterApi from '@stellar/freighter-api'
-import { Networks, TransactionBuilder, Operation, Asset, Keypair } from 'stellar-sdk'
-import  Server  from 'stellar-sdk'
+import { Networks, TransactionBuilder, Operation, Asset, Server } from '@stellar/stellar-sdk'
 import { contractService } from '../services/contractService'
 
 interface TipStats {
